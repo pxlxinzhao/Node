@@ -1,0 +1,33 @@
+@font-face {
+    font-family: growling;
+    src: url(../fonts/growling.ttf);
+}
+
+@font-face {
+    font-family: song;
+    src: url(../fonts/song.ttf);
+}
+
+@font-face {
+    font-family: hei;
+    src: url(../fonts/hei.ttf);
+}
+
+
+/*font*/
+.growling {
+	font-family: growling;
+}
+
+.song {
+	font-family: song;
+}
+
+.hei {
+	font-family: hei;
+}
+
+/*color*/
+.black {
+	color: #222;
+}
