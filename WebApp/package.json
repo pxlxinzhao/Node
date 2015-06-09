@@ -1,0 +1,15 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Hello World",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Patrick",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.3.4",
+    "express": "^4.12.4"
+  }
+}

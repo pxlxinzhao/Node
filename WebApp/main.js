@@ -1,0 +1,13 @@
+var express = require('express');
+var app = express();
+var path = require("path");
+
+app.use(express.static(__dirname + "/View"));
+// app.use(express.static(__dirname + "/Script"));
+
+app.get('/', function(req, res){
+	// res.json({message:'Hello World'});
+	res.sendFile('index.html');
+});
+
+app.listen(process.env.PORT || 8080);
