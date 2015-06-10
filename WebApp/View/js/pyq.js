@@ -12,6 +12,7 @@ $(function(){
             title: '请输入用户名和密码',
             onshow: function(dialog) {
                 dialog.setSize(BootstrapDialog.SIZE_SMALL);
+                // $('.modal-content').css('max-width', '300px');
             },
             message: loginMessage,
             buttons: [{
@@ -32,6 +33,26 @@ $(function(){
 		 // $('.modal-content .modal-header').hide();
 
 	});
+
+    //add topic
+    var $portfolioSection = $('#portfolio');
+
+    addTopic();
+
+    function addTopic(){
+        var boxHtml = 
+                    '<div id="yoyo" class="col-lg-3 col-sm-4 col-xs-6">' + 
+                        '<a href="#" class="topicBox">' + 
+                        '</a>' +
+                    '</div>';
+                    
+        console.log('Add topic');
+        $portfolioSection.append(boxHtml);
+        // $portfolioSection.empty();
+
+        
+    }
+
 })
 
 
