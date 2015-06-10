@@ -2,32 +2,51 @@
     font-family: growling;
     src: url(../fonts/growling.ttf);
 }
-
 @font-face {
     font-family: song;
     src: url(../fonts/song.ttf);
 }
-
 @font-face {
     font-family: hei;
     src: url(../fonts/hei.ttf);
 }
 
-
 /*font*/
 .growling {
 	font-family: growling;
 }
-
 .song {
 	font-family: song;
 }
-
 .hei {
 	font-family: hei;
 }
-
 /*color*/
 .black {
 	color: #222;
+}
+/* modal */
+.modal-form {
+    margin-left: auto;
+    margin-right: auto;
+}
+.modal-input {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+.modal-form input[type="text"] {
+  padding: 10px;
+  border: solid 1px gainsboro;
+  -webkit-transition: box-shadow 0.3s, border 0.3s;
+  -moz-transition: box-shadow 0.3s, border 0.3s;
+  -o-transition: box-shadow 0.3s, border 0.3s;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+.modal-form input[type="text"]:focus, .style-1 input[type="text"].focus {
+  border: solid 1px #707070;
+  -webkit-box-shadow: 0 0 5px 1px #969696;
+  -moz-box-shadow: 0 0 5px 1px #969696;
+  box-shadow: 0 0 5px 1px #969696;
 }
