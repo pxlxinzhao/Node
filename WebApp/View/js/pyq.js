@@ -35,25 +35,40 @@ $(function(){
 	});
 
     //add topic
+    var $addTopic = $('#createTopicBtn');
     var $portfolioSection = $('#portfolio');
 
-    addTopic();
+    $addTopic.click(function(event){
+        event.preventDefault();
+        addTopic();
+    });
 
     function addTopic(){
         var boxHtml = 
-                    '<div id="yoyo" class="col-lg-3 col-sm-4 col-xs-6">' + 
-                        '<a href="#" class="topicBox">' + 
-                        '</a>' +
+                    '<div id="yoyo" class="topicBox col-lg-3 col-sm-4 col-xs-6" style="background-color: '+ 
+                            randColor() +'; min-height:150px;">' + 
+                        // '<a href="#">' + 
+                        // '</a>' +
                     '</div>';
-                    
-        console.log('Add topic');
-        $portfolioSection.append(boxHtml);
+
+        console.log('Add topic', randColor());
+        $portfolioSection.find('.row').append(boxHtml);
         // $portfolioSection.empty();
 
         
     }
 
 })
+
+
+// global lib
+function randHex() {
+            return (Math.floor(Math.random() * 56) + 200).toString(16);
+        }
+
+function randColor() {
+    return "#" + randHex() + "" + randHex() + "" + randHex();
+}
 
 
 
