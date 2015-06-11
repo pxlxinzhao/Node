@@ -1,31 +1,55 @@
 $(function(){
 	// login
 	var loginMessage = 
-						'<form class="modal-input">' +
-							'<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名／邮箱" />' +
+						'<form id="loginForm" class="modal-input">' +
+							'<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
 							'<input class="modal-input" type="password" name="password" placeholder="密码" />' +
 						'</form>';
+
+    var registerMessage = 
+                        '<form id="registerForm" class="modal-input">' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password" placeholder="密码" />' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password2" placeholder="确认密码" />' +
+                            '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
+                        '</form>';
 
 	$("#loginBtn").click(function(){
 
 		 BootstrapDialog.show({
-            title: '请输入用户名和密码',
+            title: '用户登录',
             onshow: function(dialog) {
                 dialog.setSize(BootstrapDialog.SIZE_SMALL);
+                dialog.state = "login";
                 // $('.modal-content').css('max-width', '300px');
             },
             message: loginMessage,
             buttons: [{
                 label: '登录',
                 action: function(dialog) {
-                    dialog.setMessage(loginMessage);
+                    if (dialog.state === "register"){
+                        dialog.state = "login";
+                        dialog.setTitle('用户登录');
+                        dialog.setMessage(loginMessage);
+                    }
+                    else{
+                        var form = $("#loginForm").serializeArray();
+                        console.log(form);
+                    }
 
                 }
             },{
                 label: '注册',
                 action: function(dialog) {
-                    dialog.setMessage('注册');
-                    
+                    if (dialog.state === "login"){
+                       dialog.state = "register";
+                       dialog.setTitle('注册新用户');
+                       dialog.setMessage(registerMessage);
+                    }
+                    else{
+                        var form = $("#registerForm").serializeArray();
+                        console.log(form);
+                    }
                 }
             }]
         });
