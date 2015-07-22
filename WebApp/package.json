@@ -9,6 +9,7 @@
   "author": "Patrick",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.13.2",
     "bootstrap": "^3.3.4",
     "express": "^4.12.4"
   }

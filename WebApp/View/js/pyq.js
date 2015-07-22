@@ -1,4 +1,6 @@
 $(function(){
+
+    var url = window.location.origin;
 	// login
 	var loginMessage = 
 						'<form id="loginForm" class="modal-input">' +
@@ -14,6 +16,7 @@ $(function(){
                             '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
                         '</form>';
 
+    //login prompt
 	$("#loginBtn").click(function(){
 
 		 BootstrapDialog.show({
@@ -47,8 +50,14 @@ $(function(){
                        dialog.setMessage(registerMessage);
                     }
                     else{
-                        var form = $("#registerForm").serializeArray();
-                        console.log(form);
+                        var formData = $("#registerForm").serialize();
+                        console.log(formData);
+                        $.post( url + '/register', formData).done(function(data){
+                            console.log('success: ' + data);
+                        }).fail(function(jqXHR, textStatus, error){
+                             console.log('error: ' + error);
+                        });
+                        
                     }
                 }
             }]
@@ -78,8 +87,6 @@ $(function(){
         console.log('Add topic', randColor());
         $portfolioSection.find('.row').append(boxHtml);
         // $portfolioSection.empty();
-
-        
     }
 
 })
