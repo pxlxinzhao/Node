@@ -10,8 +10,8 @@ app.use(express.static(__dirname + "/View"));
 // app.use(express.static(__dirname + "/Script"));
 
 app.get('/', function(req, res){
-	res.json({message:'Hello World'});
-	// res.sendFile(__dirname + '/View/index.html');
+	// res.json({message:'Hello World'});
+	res.sendFile(__dirname + '/View/index.html');
 });
 
 app.get('/user', function(req, res){
@@ -32,6 +32,30 @@ app.post('/register', function(req, res){
     }else{
     	res.status(400).send("passwords don't match");
     }
+});
+
+app.post('/login', function(req, res){
+    var username = req.body.username;
+    var password = req.body.password;
+    if (username.length < 1 || password.length < 1){
+        console.log('failed login attempt');
+        return;
+    }
+    checkUser(username, password, function(err, user){
+        if (err) {
+            res.status(400).send("failed");
+        }
+        else {
+            if (user){
+                res.status(200).send('successfully login');
+                console.log('valid user: ', user);
+            }else{
+                res.status(400).send("failed");
+                console.log('not existed');
+            }
+            
+        }
+    })
 });
 
 app.listen(process.env.PORT || 7000);
@@ -59,7 +83,7 @@ function setUpModel(){
 }
 
 //register user
-function register(username, password, email, callback){
+function register(username, password, email, successCallback){
     var user = new User({username: username, password: password, email: email});
     user.save(function(err, user){
         if(err){
@@ -67,9 +91,17 @@ function register(username, password, email, callback){
         }
         else{
             console.log('success saving');
-            if (typeof callback === 'function'){
-            	callback();
+            if (typeof successCallback === 'function'){
+            	successCallback();
             }
         }
    });
+}
+
+function checkUser(username, password, callback){
+    if (!callback || typeof callback !== 'function') return;
+    User.findOne({
+        username: username,
+        password: password
+    },'username password', callback);
 }

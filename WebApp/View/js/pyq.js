@@ -1,3 +1,5 @@
+var LOGGED_IN_USER = null;
+
 $(function(){
 
     var url = window.location.origin;
@@ -36,9 +38,26 @@ $(function(){
                         dialog.setMessage(loginMessage);
                     }
                     else{
-                        var form = $("#loginForm").serializeArray();
-                        console.log(form);
-                    }
+                        var form = $("#loginForm");
+                        var formData = form.serialize();
+                        var formArray = form.serializeArray();
+
+                        for (var i=0; i<formArray.length; i++){
+                            if (!formArray[i] || formArray[i].value.length < 1){
+                                alert('Plz fill all fields');
+                                return;
+                            }
+                        }
+
+                        $.post( url + '/login', formData).done(function(data){
+                            console.log('success: ' + data);
+                            //--switch back to login
+                            dialog.close();
+                            alert('login success');
+                        }).fail(function(jqXHR, textStatus, error){
+                             console.log('error: ' + error);
+                             alert('failed to login');
+                        });                    }
 
                 }
             },{
@@ -50,12 +69,30 @@ $(function(){
                        dialog.setMessage(registerMessage);
                     }
                     else{
-                        var formData = $("#registerForm").serialize();
+                        var form = $("#registerForm");
+                        var formData = form.serialize();
+                        var formArray = form.serializeArray();
+                        //console.log(formArray);
+                        //--form check 
+                        for (var i=0; i<formArray.length; i++){
+                            if (!formArray[i] || formArray[i].value.length < 1){
+                                alert('Plz fill all fields');
+                                return;
+                            }
+                        }
+
                         console.log(formData);
+                        //--post register
                         $.post( url + '/register', formData).done(function(data){
                             console.log('success: ' + data);
+                            //--switch back to login
+                            dialog.state = "login";
+                            dialog.setTitle('用户登录');
+                            dialog.setMessage(loginMessage);
+                            alert('Registration success, plz login');
                         }).fail(function(jqXHR, textStatus, error){
                              console.log('error: ' + error);
+                             alert('failed to register');
                         });
                         
                     }
@@ -92,10 +129,10 @@ $(function(){
 })
 
 
-// global lib
+// global functions
 function randHex() {
-            return (Math.floor(Math.random() * 56) + 200).toString(16);
-        }
+    return (Math.floor(Math.random() * 56) + 200).toString(16);
+}
 
 function randColor() {
     return "#" + randHex() + "" + randHex() + "" + randHex();
