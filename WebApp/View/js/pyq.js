@@ -1,8 +1,10 @@
-var LOGGED_IN_USER = null;
-
 $(function(){
 
     var url = window.location.origin;
+
+    var $loginBtn = $("#loginBtn");
+    var $logoutBtn = $("#logoutBtn");
+    var $usernameArea = $('#username_display');
 	// login
 	var loginMessage = 
 						'<form id="loginForm" class="modal-input">' +
@@ -20,11 +22,36 @@ $(function(){
 
     var topicMessage = 
                        '<form id="topicForm" class="modal-input">' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password" placeholder="密码" />' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password2" placeholder="确认密码" />' +
-                            '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="subject" placeholder="主题" />' +
+                            '<textarea class="modal-input" placeholder="内容" style="min-height: 200px;"></textarea>'
                         '</form>';
+
+    
+
+    function checkLogin(){
+        $.get(url + '/checkLogin', function(data){
+            console.log(data)
+            if (data){
+                appendUsername(data);
+            }else{
+                $logoutBtn.hide();
+            }
+        })
+    }
+
+    function appendUsername(name){
+        $usernameArea.text("Welcome " + name);
+        $loginBtn.hide();
+        $logoutBtn.show();
+    }
+
+    function logout(){
+        $.post(url + '/logout', null, function(){
+            $logoutBtn.hide();
+            $loginBtn.show();
+            $usernameArea.empty();
+        });
+    }
 
     function addTopic(){
         var boxHtml = 
@@ -48,7 +75,22 @@ $(function(){
     }
 
     function createTopicForm(){
-
+        BootstrapDialog.show({
+            title: '添加新的话题',
+            size: BootstrapDialog.SIZE_NORMAL,
+            message: topicMessage,
+            buttons: [{
+                label: '添加',
+                action: function(dialog) {
+                   
+                }
+            },{
+                label: '取消',
+                action: function(dialog) {
+                    dialog.close();
+                }
+            }]
+        });
     }
 
     function createLoginRegisterForm(){
@@ -84,14 +126,13 @@ $(function(){
                             console.log('success: ' + data);
                             //--switch back to login
                             dialog.close();
-                            LOGGED_IN_USER = formArray[0].value;
-                            $('#username_display').text("Welcome " + LOGGED_IN_USER);
+                            appendUsername(data);
 
                         }).fail(function(jqXHR, textStatus, error){
                              console.log('error: ' + error);
                              myAlert('failed to login');
-                        });                    }
-
+                        });                   
+                    }
                 }
             },{
                 label: '注册',
@@ -134,8 +175,13 @@ $(function(){
         });
     }
 
+    //checkLogin
+    checkLogin();
+
     //login prompt
-    $("#loginBtn").click(createLoginRegisterForm);
+    $loginBtn.click(createLoginRegisterForm);
+
+    $logoutBtn.click(logout);
 
     //add topic
     var $addTopic = $('#createTopicBtn');
@@ -143,7 +189,8 @@ $(function(){
 
     $addTopic.click(function(event){
         event.preventDefault();
-        addTopic();
+        createTopicForm();
+        //addTopic();
     });
 })
 
