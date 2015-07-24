@@ -1,11 +1,26 @@
-$(function(){
+// global variables
 
+// global functions
+function randHex() {
+    return (Math.floor(Math.random() * 56) + 200).toString(16);
+}
+
+function randColor() {
+    return "#" + randHex() + "" + randHex() + "" + randHex();
+}
+
+$(function(){
+    //variables
     var url = window.location.origin;
 
+    //jquery selector
     var $loginBtn = $("#loginBtn");
     var $logoutBtn = $("#logoutBtn");
     var $usernameArea = $('#username_display');
-	// login
+    var $addTopic = $('#createTopicBtn');
+    var $portfolioSection = $('#portfolio');
+
+	// long string
 	var loginMessage = 
 						'<form id="loginForm" class="modal-input">' +
 							'<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
@@ -26,8 +41,7 @@ $(function(){
                             '<textarea class="modal-input" placeholder="内容" style="min-height: 200px;"></textarea>'
                         '</form>';
 
-    
-
+    //functions
     function checkLogin(){
         $.get(url + '/checkLogin', function(data){
             console.log(data)
@@ -175,34 +189,20 @@ $(function(){
         });
     }
 
-    //checkLogin
-    checkLogin();
-
-    //login prompt
+    //listeners
     $loginBtn.click(createLoginRegisterForm);
 
     $logoutBtn.click(logout);
-
-    //add topic
-    var $addTopic = $('#createTopicBtn');
-    var $portfolioSection = $('#portfolio');
 
     $addTopic.click(function(event){
         event.preventDefault();
         createTopicForm();
         //addTopic();
     });
+
+    //Initialization
+    checkLogin();
 })
-
-
-// global functions
-function randHex() {
-    return (Math.floor(Math.random() * 56) + 200).toString(16);
-}
-
-function randColor() {
-    return "#" + randHex() + "" + randHex() + "" + randHex();
-}
 
 
 
