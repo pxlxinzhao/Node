@@ -20,13 +20,15 @@ $(function(){
     var $addTopic = $('#createTopicBtn');
     var $portfolioSection = $('#portfolio');
 
+    //constant
+    TIME_FORMAT = 'MM/DD/YYYY hh:mm';
+
 	// long string
 	var loginMessage = 
 						'<form id="loginForm" class="modal-input">' +
 							'<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
 							'<input class="modal-input" type="password" name="password" placeholder="密码" />' +
 						'</form>';
-
     var registerMessage = 
                         '<form id="registerForm" class="modal-input">' +
                             '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
@@ -34,30 +36,38 @@ $(function(){
                             '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password2" placeholder="确认密码" />' +
                             '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
                         '</form>';
-
     var topicMessage = 
                        '<form id="topicForm" class="modal-input">' +
                             '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="subject" placeholder="主题" />' +
-                            '<textarea class="modal-input" placeholder="内容" style="min-height: 200px;"></textarea>'
+                            '<textarea form="topicForm" class="modal-input" placeholder="内容" style="min-height: 200px;" name="content"></textarea>'
                         '</form>';
 
     //functions
-    function checkLogin(){
+    function checkLogin(callback, showAlert){
         $.get(url + '/checkLogin', function(data){
-            console.log(data)
             if (data){
-                appendUsername(data);
+                $usernameArea.text("Welcome " + data);
+                $loginBtn.hide();
+                $logoutBtn.show();
+                if (callback && typeof callback === "function") callback();
             }else{
+                if (showAlert !== false) myAlert("Please login first");
                 $logoutBtn.hide();
             }
-        })
+        });
     }
 
-    function appendUsername(name){
-        $usernameArea.text("Welcome " + name);
-        $loginBtn.hide();
-        $logoutBtn.show();
+    function checkEmptyForm(form){
+        var formArray = form.serializeArray();
+        for (var i=0; i<formArray.length; i++){
+            if (!formArray[i] || formArray[i].value.length < 1){
+                myAlert('Please fill all fields');
+                return;
+            }
+        }
     }
+
+    
 
     function logout(){
         $.post(url + '/logout', null, function(){
@@ -67,17 +77,17 @@ $(function(){
         });
     }
 
-    function addTopic(){
+    function addTopic(obj){
         var boxHtml = 
-                    '<div id="yoyo" class="topicBox col-lg-3 col-sm-4 col-xs-6" style="background-color: '+ 
-                            randColor() +'; min-height:150px;">' + 
-                        // '<a href="#">' + 
-                        // '</a>' +
+                    '<div class="topicBox col-lg-4 col-sm-6" style="background-color: '+ 
+                            randColor() + '; min-height: 200px">' + 
+                        '<h2 style="margin: 0px;">' + obj.subject + '</h2>' + 
+                        '<p style="margin: 0px;">' + obj.content + '</p>' +
+                        '<div style="margin: 0px;" class="right"><p style="margin: 0px;">' + obj.createdBy + '</p>' +
+                        '<p style="margin: 0px;">' + moment(obj.createdTime).format(TIME_FORMAT); + '</p></div>' +
                     '</div>';
 
-        console.log('Add topic', randColor());
         $portfolioSection.find('.row').append(boxHtml);
-        // $portfolioSection.empty();
     }
 
     function myAlert(message){
@@ -89,22 +99,37 @@ $(function(){
     }
 
     function createTopicForm(){
-        BootstrapDialog.show({
-            title: '添加新的话题',
-            size: BootstrapDialog.SIZE_NORMAL,
-            message: topicMessage,
-            buttons: [{
-                label: '添加',
-                action: function(dialog) {
-                   
-                }
-            },{
-                label: '取消',
-                action: function(dialog) {
-                    dialog.close();
-                }
-            }]
-        });
+
+        //check login
+        checkLogin(showTopicForm);
+
+        function showTopicForm(){
+            BootstrapDialog.show({
+                title: '添加新的话题',
+                size: BootstrapDialog.SIZE_NORMAL,
+                message: topicMessage,
+                buttons: [{
+                    label: '添加',
+                    action:  addTopicListener
+                },{
+                    label: '取消',
+                    action: function(dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+
+            function addTopicListener(){
+                var form = $("#topicForm");
+                var data = form.serialize();
+                
+                checkEmptyForm(form);
+                //post
+                $.post('/createTopic', data).done(function(){
+                    myAlert('Topic created!');
+                })
+            }
+        }
     }
 
     function createLoginRegisterForm(){
@@ -118,75 +143,69 @@ $(function(){
             message: loginMessage,
             buttons: [{
                 label: '登录',
-                action: function(dialog) {
-                    if (dialog.state === "register"){
-                        dialog.state = "login";
-                        dialog.setTitle('用户登录');
-                        dialog.setMessage(loginMessage);
-                    }
-                    else{
-                        var form = $("#loginForm");
-                        var formData = form.serialize();
-                        var formArray = form.serializeArray();
-
-                        for (var i=0; i<formArray.length; i++){
-                            if (!formArray[i] || formArray[i].value.length < 1){
-                                myAlert('Plz fill all fields');
-                                return;
-                            }
-                        }
-
-                        $.post( url + '/login', formData).done(function(data){
-                            console.log('success: ' + data);
-                            //--switch back to login
-                            dialog.close();
-                            appendUsername(data);
-
-                        }).fail(function(jqXHR, textStatus, error){
-                             console.log('error: ' + error);
-                             myAlert('failed to login');
-                        });                   
-                    }
-                }
+                action: registerListener
             },{
                 label: '注册',
-                action: function(dialog) {
-                    if (dialog.state === "login"){
-                       dialog.state = "register";
-                       dialog.setTitle('注册新用户');
-                       dialog.setMessage(registerMessage);
-                    }
-                    else{
-                        var form = $("#registerForm");
-                        var formData = form.serialize();
-                        var formArray = form.serializeArray();
-                        //console.log(formArray);
-                        //--form check 
-                        for (var i=0; i<formArray.length; i++){
-                            if (!formArray[i] || formArray[i].value.length < 1){
-                                myAlert('Plz fill all fields');
-                                return;
-                            }
-                        }
-
-                        console.log(formData);
-                        //--post register
-                        $.post( url + '/register', formData).done(function(data){
-                            console.log('success: ' + data);
-                            //--switch back to login
-                            dialog.state = "login";
-                            dialog.setTitle('用户登录');
-                            dialog.setMessage(loginMessage);
-                            myAlert('Registration success, plz login');
-                        }).fail(function(jqXHR, textStatus, error){
-                             console.log('error: ' + error);
-                             myAlert('failed to register');
-                        });
-                        
-                    }
-                }
+                action: loginListener
             }]
         });
+        
+        function loginListener(){
+            if (dialog.state === "register"){
+                dialog.state = "login";
+                dialog.setTitle('用户登录');
+                dialog.setMessage(loginMessage);
+            }
+            else{
+                var form = $("#loginForm");
+                var formData = form.serialize();
+                
+                checkEmptyForm(form);
+
+                $.post( url + '/login', formData).done(function(data){
+                    console.log('success: ' + data);
+                    dialog.close();
+                    checkLogin(null, false);
+
+                }).fail(function(jqXHR, textStatus, error){
+                     console.log('error: ' + error);
+                     myAlert('failed to login');
+                });                   
+            }
+        }
+
+        function registerListener(){
+            if (dialog.state === "login"){
+               dialog.state = "register";
+               dialog.setTitle('注册新用户');
+               dialog.setMessage(registerMessage);
+            }
+            else{
+                var form = $("#registerForm");
+                var formData = form.serialize();
+                checkEmptyForm(form);
+                $.post( url + '/register', formData).done(function(data){
+                    dialog.state = "login";
+                    dialog.setTitle('用户登录');
+                    dialog.setMessage(loginMessage);
+                    myAlert('Registration success, please login');
+                }).fail(function(jqXHR, textStatus, error){
+                     console.log(jqXHR);
+                     myAlert(jqXHR.responseText);
+                });
+                
+            }
+        }
+
+    }
+
+    function getTopics(){
+        // $portfolioSection.find('.row').empty();
+        $.get('/getTopics', function(data){
+            for(var i=0; i<data.length; i++){
+                addTopic(data[i]);
+            }
+        })
     }
 
     //listeners
@@ -201,7 +220,9 @@ $(function(){
     });
 
     //Initialization
-    checkLogin();
+    checkLogin(null, false);
+    console.log(1);
+    getTopics();
 })
 
 

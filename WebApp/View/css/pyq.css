@@ -11,24 +11,19 @@
     src: url(../fonts/hei.ttf);
 }
 
-#username_display {
-  float: right; 
-  margin-top: 14px;
-}
-
 /*font*/
 .growling {
-	font-family: growling;
+  font-family: growling;
 }
 .song {
-	font-family: song;
+  font-family: song;
 }
 .hei {
-	font-family: hei;
+  font-family: hei;
 }
 /*color*/
 .black {
-	color: #222;
+  color: #222;
 }
 /* modal */
 .modal
@@ -40,20 +35,35 @@
 @media (max-width: 768px) {
    .modal .modal-dialog
    {
-    	max-width:300px;
-    	/*height:1500px;*/
-    	margin-right: auto;
-    	margin-left: auto
+      max-width:300px;
+      /*height:1500px;*/
+      margin-right: auto;
+      margin-left: auto
    }
 }
 @media (max-width: 450px) {
    .modal .modal-dialog
-   {	
-   		width: '';
-    	/*margin-right: auto;
-    	margin-left: auto*/
+   {  
+      width: '';
+      /*margin-right: auto;
+      margin-left: auto*/
    }
 }
+@media (max-width: @screen-sm) {
+    [class*="col-"] {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .container-fluid {
+      margin: 0;
+      padding: 0;
+    }
+}
+
 .modal-form {
     margin-left: auto;
     margin-right: auto;
@@ -79,9 +89,38 @@
   box-shadow: 0 0 5px 1px #969696;
 }
 
-//topic 
+/*------------------------------custom css------------------------------*/
+
+#username_display {
+  float: right; 
+  margin-top: 14px;
+}
 
 .topicBox {
-	background-color: red;
-	min-height: 300px;
+  background-color: red;
+  min-height: 400px;
+}
+.topicBox h2 {
+  font-size: 20px;
+  font-weight: 2;
+  padding: 5px;
+}
+.topicBox > p {
+  padding: 5px;
+}
+
+.right {
+  float: right;
+}
+
+.slim_bot_margin{
+  margin-bottom: 5px;
+}
+
+.no_bot_margin{
+  margin-bottom: 0px;
+}
+
+.no_top_margin{
+  margin-top: 0px;
 }
