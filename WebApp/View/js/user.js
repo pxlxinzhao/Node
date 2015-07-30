@@ -1,1 +1,1 @@
-security.checkLogin(null, false);
+_security.checkLogin(null, false);

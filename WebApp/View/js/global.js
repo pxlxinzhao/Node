@@ -6,6 +6,7 @@ var $loginBtn = $("#loginBtn");
 var $logoutBtn = $("#logoutBtn");
 var $usernameArea = $('#username_display');
 
+var TIME_FORMAT = 'MM/DD/YYYY hh:mm';
 
 // global functions
 function randHex() {
@@ -24,11 +25,42 @@ function myAlert(message){
 	});
 }
 
+function checkEmptyForm(form){
+    var formArray = form.serializeArray();
+    for (var i=0; i<formArray.length; i++){
+        if (!formArray[i] || formArray[i].value.length < 1){
+            myAlert('Please fill all fields');
+            return;
+        }
+    }
+}
+
 // global objects
 function Security(){
 
-    function checkLogin(callback, showAlert){
-        $.get(url + '/checkLogin', function(data){
+    var loginMessage = 
+                        '<form id="loginForm" class="modal-input">' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
+                            '<input class="modal-input" type="password" name="password" placeholder="密码" />' +
+                        '</form>';
+    var registerMessage = 
+                        '<form id="registerForm" class="modal-input">' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password" placeholder="密码" />' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password2" placeholder="确认密码" />' +
+                            '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
+                        '</form>';
+
+    this.logout = function(){
+        $.post(url + '/logout', null, function(){
+            $logoutBtn.hide();
+            $loginBtn.show();
+            $usernameArea.empty();
+        });
+    }
+
+    this.checkLogin = function(callback, showAlert){
+         $.get(url + '/checkLogin', function(data){
             if (data){
                 $usernameArea.text("Welcome " + data);
                 $loginBtn.hide();
@@ -41,55 +73,7 @@ function Security(){
         });
     }
 
-    this.checkLogin = checkLogin;
-}
-
-function LoginModule(){
-	// long string
-	var loginMessage = 
-						'<form id="loginForm" class="modal-input">' +
-							'<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
-							'<input class="modal-input" type="password" name="password" placeholder="密码" />' +
-						'</form>';
-    var registerMessage = 
-                        '<form id="registerForm" class="modal-input">' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="username" placeholder="用户名" />' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password" placeholder="密码" />' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="password" name="password2" placeholder="确认密码" />' +
-                            '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
-                        '</form>';
-    var topicMessage = 
-                       '<form id="topicForm" class="modal-input">' +
-                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="subject" placeholder="主题" />' +
-                            '<textarea form="topicForm" class="modal-input" placeholder="内容" style="min-height: 200px;" name="content"></textarea>'
-                        '</form>';
-
-    //functions
-
-    function checkEmptyForm(form){
-        var formArray = form.serializeArray();
-        for (var i=0; i<formArray.length; i++){
-            if (!formArray[i] || formArray[i].value.length < 1){
-                myAlert('Please fill all fields');
-                return;
-            }
-        }
-    }
-    
-    function logout(){
-        $.post(url + '/logout', null, function(){
-            $logoutBtn.hide();
-            $loginBtn.show();
-            $usernameArea.empty();
-        });
-    }
-
-    function createTopicForm(){
-        //check login
-        security.checkLogin(showTopicForm);
-    }
-
-    function createLoginRegisterForm(){
+    this.createLoginRegisterForm = function(){
          BootstrapDialog.show({
             title: '用户登录',
             onshow: function(dialog) {
@@ -122,7 +106,7 @@ function LoginModule(){
                 $.post( url + '/login', formData).done(function(data){
                     console.log('success: ' + data);
                     dialog.close();
-                    security.checkLogin(null, false);
+                    _security.checkLogin(null, false);
 
                 }).fail(function(jqXHR, textStatus, error){
                      console.log('error: ' + error);
@@ -155,13 +139,12 @@ function LoginModule(){
         }
 
     }
-
-    this.createLoginRegisterForm = createLoginRegisterForm;
 }
 
-
-
 // global variables
-var security = new Security();
-var loginModule = new LoginModule();
+var _security = new Security();
 
+// security setup
+_security.checkLogin(null, false);
+$loginBtn.click(_security.createLoginRegisterForm);
+$logoutBtn.click(_security.logout);

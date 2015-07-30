@@ -1,15 +1,14 @@
-var express = require('express');
-var bodyParser = require("body-parser");
 var app = express();
 var path = require("path");
+var express = require('express');
+var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var session = require('client-sessions');
 var moment = require('moment');
 
 
-//constants
+// Constants
 var MAX_TOPIC_LOADED = 8;
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -23,12 +22,18 @@ app.use(session({
   activeDuration: 5 * 60 * 1000,
 }));
 
+
+// Navigation 
 app.get('/', function(req, res){
-	// res.json({message:'Hello World'});
 	res.sendFile(__dirname + '/View/index.html');
 
 });
+app.get('/user', function(req, res){
+    res.sendFile(__dirname + '/View/user.html');
+});
 
+// Webservices 
+// no need for login session
 app.get('/getTopics', function(req, res){
     var query = Topic.find({}).limit(MAX_TOPIC_LOADED);
     query.exec(function(err, Topics){
@@ -53,13 +58,6 @@ app.get('/checkLogin', function(req, res){
          res.status(200).send();
     }
 });
-
-app.get('/user', function(req, res){
-	// res.json({message:'Hello World'});
-	res.sendFile(__dirname + '/View/user.html');
-	// res.sendFile('user.html');
-});
-
 app.post('/register', function(req, res){
     var email = req.body.email;  // second parameter is default
     var username = req.body.username;
@@ -104,17 +102,20 @@ app.post('/logout', function(req, res){
     res.status(200).send('');
 });
 
+//need for login session
 app.post('/createTopic', function(req, res){
-    var subject = req.body.subject;  // second parameter is default
-    var content = req.body.content;
-    var user = req.session.user;
-    if (user && subject && content && subject.length > 0 && content.length > 0){
-         createTopic(user.username, subject, content, function () {
-             res.status(200).send('successfully created topic');
-         });
-    }else{
-        res.status(400).send("error");
-    }
+    checkLogin(req, res, function(){
+        var subject = req.body.subject;  // second parameter is default
+        var content = req.body.content;
+        var user = req.session.user;
+        if (user && subject && content && subject.length > 0 && content.length > 0){
+             createTopic(user.username, subject, content, function () {
+                 res.status(200).send('successfully created topic');
+             });
+        }else{
+            res.status(400).send("error");
+        }
+    })
 });
 
 app.listen(process.env.PORT || 7000);
@@ -197,4 +198,12 @@ function checkUser(username, password, callback){
         username: username,
         password: password
     },'username password', callback);
+}
+
+function checkLogin(req, res, callback){
+    if (req.session.user){
+        if (callback && typeof callback === "function") callback();
+    }else{
+        res.status(400).send("Need login first");
+    }
 }
