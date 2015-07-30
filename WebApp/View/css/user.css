@@ -1,4 +1,9 @@
-.chat-box {
+#tabs-container {
+	margin-top: 50px
+}
+
+
+/*.chat-box {
 	width: 100%;
 	height: 300px;
 	border: solid #fff 1px;
@@ -20,4 +25,4 @@
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
-}
+}*/

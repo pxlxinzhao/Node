@@ -5,6 +5,7 @@ var url = window.location.origin;
 var $loginBtn = $("#loginBtn");
 var $logoutBtn = $("#logoutBtn");
 var $usernameArea = $('#username_display');
+var $usernameList = $('#userName');
 
 var TIME_FORMAT = 'MM/DD/YYYY hh:mm';
 
@@ -55,14 +56,18 @@ function Security(){
         $.post(url + '/logout', null, function(){
             $logoutBtn.hide();
             $loginBtn.show();
-            $usernameArea.empty();
+            // $usernameArea.empty();
+            $usernameList.empty();
+            $usernameList.show();
         });
     }
 
     this.checkLogin = function(callback, showAlert){
          $.get(url + '/checkLogin', function(data){
             if (data){
-                $usernameArea.text("Welcome " + data);
+                // $usernameArea.text("Welcome " + data);
+                $usernameList.text("Welcome " + data);
+                $usernameList.show();
                 $loginBtn.hide();
                 $logoutBtn.show();
                 if (callback && typeof callback === "function") callback();
