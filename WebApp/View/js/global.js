@@ -1,11 +1,50 @@
-$(function(){
-    
-    var $addTopic = $('#createTopicBtn');
-    var $portfolioSection = $('#portfolio');
+// golobal variables
+var url = window.location.origin;
 
-    //constant
-    TIME_FORMAT = 'MM/DD/YYYY hh:mm';
+//jquery selector
+var $loginBtn = $("#loginBtn");
+var $logoutBtn = $("#logoutBtn");
+var $usernameArea = $('#username_display');
 
+
+// global functions
+function randHex() {
+    return (Math.floor(Math.random() * 56) + 200).toString(16);
+}
+
+function randColor() {
+    return "#" + randHex() + "" + randHex() + "" + randHex();
+}
+
+function myAlert(message){
+	BootstrapDialog.show({
+	    title: '提示',
+	    size: BootstrapDialog.SIZE_SMALL,
+	    message: message
+	});
+}
+
+// global objects
+function Security(){
+
+    function checkLogin(callback, showAlert){
+        $.get(url + '/checkLogin', function(data){
+            if (data){
+                $usernameArea.text("Welcome " + data);
+                $loginBtn.hide();
+                $logoutBtn.show();
+                if (callback && typeof callback === "function") callback();
+            }else{
+                if (showAlert !== false) myAlert("Please login first");
+                $logoutBtn.hide();
+            }
+        });
+    }
+
+    this.checkLogin = checkLogin;
+}
+
+function LoginModule(){
 	// long string
 	var loginMessage = 
 						'<form id="loginForm" class="modal-input">' +
@@ -36,9 +75,7 @@ $(function(){
             }
         }
     }
-
     
-
     function logout(){
         $.post(url + '/logout', null, function(){
             $logoutBtn.hide();
@@ -47,51 +84,9 @@ $(function(){
         });
     }
 
-    function addTopic(obj){
-        var boxHtml = 
-                    '<div class="topicBox col-lg-4 col-sm-6" style="background-color: '+ 
-                            randColor() + '; min-height: 200px">' + 
-                        '<h2 style="margin: 0px;">' + obj.subject + '</h2>' + 
-                        '<p style="margin: 0px;">' + obj.content + '</p>' +
-                        '<div style="margin: 0px;" class="right"><p style="margin: 0px;">' + obj.createdBy + '</p>' +
-                        '<p style="margin: 0px;">' + moment(obj.createdTime).format(TIME_FORMAT); + '</p></div>' +
-                    '</div>';
-
-        $portfolioSection.find('.row').append(boxHtml);
-    }
-
     function createTopicForm(){
-
         //check login
         security.checkLogin(showTopicForm);
-
-        function showTopicForm(){
-            BootstrapDialog.show({
-                title: '添加新的话题',
-                size: BootstrapDialog.SIZE_NORMAL,
-                message: topicMessage,
-                buttons: [{
-                    label: '添加',
-                    action:  addTopicListener
-                },{
-                    label: '取消',
-                    action: function(dialog) {
-                        dialog.close();
-                    }
-                }]
-            });
-
-            function addTopicListener(){
-                var form = $("#topicForm");
-                var data = form.serialize();
-                
-                checkEmptyForm(form);
-                //post
-                $.post('/createTopic', data).done(function(){
-                    myAlert('Topic created!');
-                })
-            }
-        }
     }
 
     function createLoginRegisterForm(){
@@ -161,33 +156,12 @@ $(function(){
 
     }
 
-    function getTopics(){
-        // $portfolioSection.find('.row').empty();
-        $.get('/getTopics', function(data){
-            for(var i=0; i<data.length; i++){
-                addTopic(data[i]);
-            }
-        })
-    }
-
-    //listeners
-    $loginBtn.click(loginModule.createLoginRegisterForm);
-
-    $logoutBtn.click(logout);
-
-    $addTopic.click(function(event){
-        event.preventDefault();
-        createTopicForm();
-        //addTopic();
-    });
-
-    //Initialization
-    security.checkLogin(null, false);
-    console.log(1);
-    getTopics();
-})
+    this.createLoginRegisterForm = createLoginRegisterForm;
+}
 
 
 
-
+// global variables
+var security = new Security();
+var loginModule = new LoginModule();
 

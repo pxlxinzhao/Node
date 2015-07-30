@@ -1,0 +1,1 @@
+security.checkLogin(null, false);
