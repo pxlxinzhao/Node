@@ -25,6 +25,10 @@
 .black {
   color: #222;
 }
+/**/
+.right{
+  float: right;
+}
 /* modal */
 .modal
 {

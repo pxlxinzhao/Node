@@ -25,6 +25,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/creative.css" type="text/css">
     <link rel="stylesheet" href="css/pyq.css" type="text/css">
+    <link rel="stylesheet" href="css/user.css" type="text/css">
 
 </head>
 
@@ -40,21 +41,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">圈多多</a>
+                <a class="navbar-brand page-scroll" href="/">圈多多</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
+                <ul id="main_nav" class="nav navbar-nav navbar-right">
                     <li>
                         <a id="userName"></a>
                     </li>
-                    <li>
+                    <li id="loginli">
                         <a id="loginBtn">登录</a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a hidden id="logoutBtn">登出</a>
-                    </li>
+                    </li> -->
                 </ul>
                 <div id="username_display">
                 </div>
@@ -67,7 +68,35 @@
 
 <!-- main content starts -->
 
-    
+    <section class="user-profile-header" id="user-profile-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 collapse navbar-collapse">
+                    <!-- <img src="../img/patrick.jpg" height="120" width="120"> -->
+                    <ul class="nav navbar-nav">
+                      <li>
+                        <a href="/dashboard" aria-selected="false" class="subnav-item">Dashboard</a>
+                      </li>
+                      <li>
+                        <a href="/inbox" aria-selected="false" class="subnav-item">Inbox</a>
+                      </li>
+                      <li>
+                        <a href="/rooms" aria-selected="false" class="subnav-item">Your Listings</a>
+                      </li>
+                      <li>
+                        <a href="/trips/upcoming" aria-selected="false" class="subnav-item">Your Trips</a>
+                      </li>
+                      <li>
+                        <a href="https://www.airbnb.ca/users/edit" aria-selected="false" class="subnav-item">Profile</a>
+                      </li>
+                      <li>
+                        <a href="/account" aria-selected="true" class="subnav-item">Account</a>
+                      </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
 <!-- main content ends -->
 

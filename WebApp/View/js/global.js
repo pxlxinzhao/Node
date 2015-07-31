@@ -3,9 +3,9 @@ var url = window.location.origin;
 
 //jquery selector
 var $loginBtn = $("#loginBtn");
-var $logoutBtn = $("#logoutBtn");
-var $usernameArea = $('#username_display');
-var $usernameList = $('#userName');
+var $mainNav = $("#main_nav");
+var $logoutBtn;
+var _security = new Security();
 
 var TIME_FORMAT = 'MM/DD/YYYY hh:mm';
 
@@ -52,28 +52,34 @@ function Security(){
                             '<input class="modal-input" type="text" name="email" placeholder="邮箱" />' +
                         '</form>';
 
+    
+
     this.logout = function(){
         $.post(url + '/logout', null, function(){
             $logoutBtn.hide();
             $loginBtn.show();
-            // $usernameArea.empty();
-            $usernameList.empty();
-            $usernameList.show();
+            $mainNav.children().not("#loginli").remove();
         });
     }
 
     this.checkLogin = function(callback, showAlert){
          $.get(url + '/checkLogin', function(data){
             if (data){
-                // $usernameArea.text("Welcome " + data);
-                $usernameList.text("Welcome " + data);
-                $usernameList.show();
+                var loggedInNavBarMessage = 
+                                '<li><a href="#">HTML</a></li>' +
+                                '<li><a href="#">CSS</a></li>' +
+                                '<li><a class="song" href="/user">我的主页</a></li>' +
+                                '<li><a class="song" id="logoutBtn">登出</a></li>';
+                
+                $mainNav.append(loggedInNavBarMessage);
+                $logoutBtn = $("#logoutBtn");
+                $logoutBtn.click(_security.logout);
                 $loginBtn.hide();
                 $logoutBtn.show();
                 if (callback && typeof callback === "function") callback();
             }else{
                 if (showAlert !== false) myAlert("Please login first");
-                $logoutBtn.hide();
+                // $logoutBtn.hide();
             }
         });
     }
@@ -84,7 +90,6 @@ function Security(){
             onshow: function(dialog) {
                 dialog.setSize(BootstrapDialog.SIZE_SMALL);
                 dialog.state = "login";
-                // $('.modal-content').css('max-width', '300px');
             },
             message: loginMessage,
             buttons: [{
@@ -146,10 +151,6 @@ function Security(){
     }
 }
 
-// global variables
-var _security = new Security();
-
 // security setup
 _security.checkLogin(null, false);
 $loginBtn.click(_security.createLoginRegisterForm);
-$logoutBtn.click(_security.logout);

@@ -12,7 +12,7 @@ body {
 }
 
 body {
-    font-family: song,Merriweather,'Helvetica Neue',Arial,sans-serif;
+    font-family: Merriweather,'Helvetica Neue',Arial,sans-serif;
 }
 
 hr {
@@ -447,8 +447,16 @@ fieldset[disabled] .btn-primary.active {
     border: 0;
     border-radius: 300px;
     text-transform: uppercase;
-    font-family: song,'Open Sans','Helvetica Neue',Arial,sans-serif;
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
     font-weight: 700;
+}
+
+.btn-lit {
+    font-family: Arial,sans-serif;
+    font-weight: 500;
+    border-radius: 0px;
+    background-color: rgba(0,0,0,0);
+
 }
 
 .btn-xl {
