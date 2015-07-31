@@ -1,3 +1,8 @@
+.collapse-show {
+  display: none;
+  visibility: visible;
+}
+
 .user-profile-header{
 	/*background-color: #F48F79;*/
 	padding-bottom: 0px;

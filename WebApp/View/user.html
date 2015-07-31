@@ -12,7 +12,7 @@
     <title>Creative - Start Bootstrap Theme</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
 
     <!-- Custom Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -71,16 +71,16 @@
     <section class="user-profile-header" id="user-profile-header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 collapse navbar-collapse">
+                <div class="col-lg-8 col-lg-offset-2 ">
                     <!-- <img src="../img/patrick.jpg" height="120" width="120"> -->
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav responsive" id="myTabs">
                       <li>
-                        <a href="/dashboard" aria-selected="false" class="subnav-item">Dashboard</a>
+                        <a href="#dashboard" aria-selected="false" data-toggle="tab" class="subnav-item">Dashboard</a>
                       </li>
                       <li>
-                        <a href="/inbox" aria-selected="false" class="subnav-item">Inbox</a>
+                        <a href="#inbox" aria-selected="false" data-toggle="tab" class="subnav-item">Inbox</a>
                       </li>
-                      <li>
+                      <!-- <li>
                         <a href="/rooms" aria-selected="false" class="subnav-item">Your Listings</a>
                       </li>
                       <li>
@@ -91,12 +91,25 @@
                       </li>
                       <li>
                         <a href="/account" aria-selected="true" class="subnav-item">Account</a>
-                      </li>
+                      </li> -->
                     </ul>
                 </div>
             </div>
         </div>
+        
+       <div class="tab-content responsive">
+            <div role="tabpanel" class="tab-pane tab-content responsive active" id="dashboard">
+                Here is your dashboard
+            </div>
+
+            <div role="tabpanel" class="tab-pane tab-content responsive" id="inbox">
+                Here is your inbox
+        </div>
+      </div>
+        
     </section>
+
+
 
 <!-- main content ends -->
 
@@ -120,8 +133,9 @@
     <script src="js/moment.js"></script>
 
     <!-- My Script -->
+    <script src="js/responsive-tabs-2.3.2.js"></script>
     <script src="js/global.js"></script>
-    <script src="js/pyq.js"></script>
+    <script src="js/user.js"></script>
 
 </body>
 
