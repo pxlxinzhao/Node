@@ -71,31 +71,39 @@
     <section class="user-profile-header" id="user-profile-header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 collapse navbar-collapse">
+                <!-- <div class="col-lg-8 col-lg-offset-2 collapse navbar-collapse"> -->
                     <!-- <img src="../img/patrick.jpg" height="120" width="120"> -->
-                    <ul class="nav navbar-nav">
+                    <ul class="nav nav-tabs responsive" id="myTab">
                       <li>
-                        <a href="/dashboard" aria-selected="false" class="subnav-item">Dashboard</a>
+                        <a href="#dashboard" aria-selected="false" class="subnav-item" data-toggle="tab">Dashboard</a>
                       </li>
                       <li>
-                        <a href="/inbox" aria-selected="false" class="subnav-item">Inbox</a>
+                        <a href="#inbox" aria-selected="false" class="subnav-item" data-toggle="tab">Inbox</a>
                       </li>
                       <li>
-                        <a href="/rooms" aria-selected="false" class="subnav-item">Your Listings</a>
+                        <a href="#rooms" aria-selected="false" class="subnav-item" data-toggle="tab">Your Listings</a>
+                      </li>
+                      <!-- <li>
+                        <a href="#" aria-selected="false" class="subnav-item">Your Trips</a>
                       </li>
                       <li>
-                        <a href="/trips/upcoming" aria-selected="false" class="subnav-item">Your Trips</a>
+                        <a href="#" aria-selected="false" class="subnav-item">Profile</a>
                       </li>
                       <li>
-                        <a href="https://www.airbnb.ca/users/edit" aria-selected="false" class="subnav-item">Profile</a>
-                      </li>
-                      <li>
-                        <a href="/account" aria-selected="true" class="subnav-item">Account</a>
-                      </li>
+                        <a href="#" aria-selected="true" class="subnav-item">Account</a>
+                      </li> -->
                     </ul>
-                </div>
+
+                    <div class="tab-content responsive">
+                      <div class="tab-pane active" id="dashboard">dashboard</div>
+                      <div class="tab-pane" id="inbox">inbox</div>
+                      <div class="tab-pane" id="rooms">rooms</div>
+                    </div>
+                <!-- </div> -->
             </div>
         </div>
+
+
     </section>
 
 <!-- main content ends -->
@@ -120,8 +128,9 @@
     <script src="js/moment.js"></script>
 
     <!-- My Script -->
+    <script src="js/responsive-tabs.js"></script>
     <script src="js/global.js"></script>
-    <script src="js/pyq.js"></script>
+    <script src="js/user.js"></script>
 
 </body>
 
