@@ -9,3 +9,7 @@
 	height: 100px;
 	background-image: url("../img/patrick.jpg");
 }
+
+.row-with-small-padding {
+	padding: 10px;
+}

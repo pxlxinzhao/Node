@@ -1,13 +1,33 @@
 $(function(){
 
-	_security.checkLogin(null, false);
+	//setup 
+	var username;
+	var $dashboard = $("#dashboard");
 
-	$('#myTabs a').click(function (e) {
-	  e.preventDefault()
-	  $(this).tab('show')
-	})
+	_security.checkLogin(function(data){
+		username = data;
+		console.log("username", username);
+		if(username){
+			setUpTopic();
+			setupUI();
+		}
 
-	fakewaffle.responsiveTabs(['xs', 'sm']);
+	}, false);
+
+	function setupUI(){
+		$('#myTabs a').click(function (e) {
+		  e.preventDefault()
+		  $(this).tab('show')
+		})
+
+		fakewaffle.responsiveTabs(['xs', 'sm']);
+	}
+
+	function setUpTopic(){
+		_topic.placeToAppend = $dashboard;
+		_topic.getTopics();
+	}
+
 
 })
 

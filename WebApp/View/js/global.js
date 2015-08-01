@@ -1,40 +1,17 @@
 // golobal variables
 var url = window.location.origin;
 
-//jquery selector
+// jquery selector
 var $loginBtn = $("#loginBtn");
 var $mainNav = $("#main_nav");
 var $logoutBtn;
+
+// global instance
 var _security = new Security();
+var _topic = new Topic();
 
+// global string 
 var TIME_FORMAT = 'MM/DD/YYYY hh:mm';
-
-// global functions
-function randHex() {
-    return (Math.floor(Math.random() * 56) + 200).toString(16);
-}
-
-function randColor() {
-    return "#" + randHex() + "" + randHex() + "" + randHex();
-}
-
-function myAlert(message){
-	BootstrapDialog.show({
-	    title: '提示',
-	    size: BootstrapDialog.SIZE_SMALL,
-	    message: message
-	});
-}
-
-function checkEmptyForm(form){
-    var formArray = form.serializeArray();
-    for (var i=0; i<formArray.length; i++){
-        if (!formArray[i] || formArray[i].value.length < 1){
-            myAlert('Please fill all fields');
-            return;
-        }
-    }
-}
 
 // global objects
 function Security(){
@@ -76,7 +53,7 @@ function Security(){
                 $logoutBtn.click(_security.logout);
                 $loginBtn.hide();
                 $logoutBtn.show();
-                if (callback && typeof callback === "function") callback();
+                if (callback && typeof callback === "function") callback(data);
             }else{
                 if (showAlert !== false) myAlert("Please login first");
                 // $logoutBtn.hide();
@@ -150,7 +127,99 @@ function Security(){
 
     }
 }
+function Topic(){
+        var self = this;
+        var topicMessage = 
+                       '<form id="topicForm" class="modal-input">' +
+                            '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="subject" placeholder="主题" />' +
+                            '<textarea form="topicForm" class="modal-input" placeholder="内容" style="min-height: 200px;" name="content"></textarea>'
+                        '</form>';
+        this.placeToAppend;
+
+        function addTopic(obj){
+            var boxHtml = 
+                        '<div class="topicBox col-lg-4 col-sm-6" style="background-color: '+ 
+                                randColor() + '; min-height: 200px">' + 
+                            '<h2 style="margin: 0px;">' + obj.subject + '</h2>' + 
+                            '<p style="margin: 0px;">' + obj.content + '</p>' +
+                            '<div style="margin: 0px;" class="right"><p style="margin: 0px;">' + obj.createdBy + '</p>' +
+                            '<p style="margin: 0px;">' + moment(obj.createdTime).format(TIME_FORMAT); + '</p></div>' +
+                        '</div>';
+            if (self.placeToAppend){
+                console.log("add Topic");
+                self.placeToAppend.find('.row').append(boxHtml);
+            }
+        }
+
+        this.createTopicForm = function(){
+
+            //check login
+            _security.checkLogin(showTopicForm);
+
+            function showTopicForm(){
+                BootstrapDialog.show({
+                    title: '添加新的话题',
+                    size: BootstrapDialog.SIZE_NORMAL,
+                    message: topicMessage,
+                    buttons: [{
+                        label: '添加',
+                        action:  addTopicListener
+                    },{
+                        label: '取消',
+                        action: function(dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
+
+                function addTopicListener(){
+                    var form = $("#topicForm");
+                    var data = form.serialize();
+                    
+                    checkEmptyForm(form);
+                    //post
+                    $.post('/createTopic', data).done(function(){
+                        myAlert('Topic created!');
+                    })
+                }
+            }
+        }
+
+        this.getTopics = function(){
+            $.get('/getTopics', function(data){
+                for(var i=0; i<data.length; i++){
+                    addTopic(data[i]);
+                }
+            })
+        }
+}
 
 // security setup
 _security.checkLogin(null, false);
 $loginBtn.click(_security.createLoginRegisterForm);
+
+// global functions
+function randHex() {
+
+    return (Math.floor(Math.random() * 56) + 200).toString(16);
+}
+function randColor() {
+
+    return "#" + randHex() + "" + randHex() + "" + randHex();
+}
+function myAlert(message){
+    BootstrapDialog.show({
+        title: '提示',
+        size: BootstrapDialog.SIZE_SMALL,
+        message: message
+    });
+}
+function checkEmptyForm(form){
+    var formArray = form.serializeArray();
+    for (var i=0; i<formArray.length; i++){
+        if (!formArray[i] || formArray[i].value.length < 1){
+            myAlert('Please fill all fields');
+            return;
+        }
+    }
+}
