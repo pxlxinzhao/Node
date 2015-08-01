@@ -70,7 +70,7 @@ function Security(){
                                 '<li><a href="#">CSS</a></li>' +
                                 '<li><a class="song" href="/user">我的主页</a></li>' +
                                 '<li><a class="song" id="logoutBtn">登出</a></li>';
-                
+                $mainNav.children().not("#loginli").remove()
                 $mainNav.append(loggedInNavBarMessage);
                 $logoutBtn = $("#logoutBtn");
                 $logoutBtn.click(_security.logout);

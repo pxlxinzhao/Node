@@ -8,7 +8,7 @@ var moment = require('moment');
 
 
 // Constants
-var MAX_TOPIC_LOADED = 8;
+var MAX_TOPIC_LOADED = 12;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
