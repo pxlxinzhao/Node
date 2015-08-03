@@ -1,5 +1,6 @@
 $(function(){
 
+<<<<<<< HEAD
 	//setup 
 	var username;
 	var $topics = $("#topics");
@@ -18,10 +19,20 @@ $(function(){
 		$('#myTabs a').click(function (e) {
 		  e.preventDefault()
 		  $(this).tab('show')
+=======
+	_security.checkLogin(null, false);
+	setupTabs();
+
+	function setupTabs(){
+		$('#myTabs a').click(function (e) {
+		  e.preventDefault();
+		  $(this).tab('show');
+>>>>>>> origin/refactor1
 		})
 
 		fakewaffle.responsiveTabs(['xs', 'sm']);
 	}
+<<<<<<< HEAD
 
 	function setUpTopic(){
 		_topic.placeToAppend = $topics;
@@ -30,4 +41,9 @@ $(function(){
 
 
 })
+=======
+})
+
+
+>>>>>>> origin/refactor1
 

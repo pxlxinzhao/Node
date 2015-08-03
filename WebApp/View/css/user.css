@@ -1,3 +1,8 @@
+.collapse-show {
+  display: none;
+  visibility: visible;
+}
+
 .user-profile-header{
 	/*background-color: #F48F79;*/
 	padding-bottom: 0px;
@@ -9,6 +14,7 @@
 	height: 100px;
 	background-image: url("../img/patrick.jpg");
 }
+<<<<<<< HEAD
 
 .row-with-small-padding {
 	padding: 10px;
@@ -26,3 +32,5 @@
 .short-input {
 	max-width: 300px;
 }
+=======
+>>>>>>> origin/refactor1
