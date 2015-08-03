@@ -99,32 +99,3 @@
   float: right; 
   margin-top: 14px;
 }
-
-.topicBox {
-  background-color: red;
-  min-height: 400px;
-}
-.topicBox h2 {
-  font-size: 20px;
-  font-weight: 2;
-  padding: 5px;
-}
-.topicBox > p {
-  padding: 5px;
-}
-
-.right {
-  float: right;
-}
-
-.slim_bot_margin{
-  margin-bottom: 5px;
-}
-
-.no_bot_margin{
-  margin-bottom: 0px;
-}
-
-.no_top_margin{
-  margin-top: 0px;
-}

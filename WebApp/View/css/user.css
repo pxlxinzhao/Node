@@ -13,3 +13,16 @@
 .row-with-small-padding {
 	padding: 10px;
 }
+
+.tab-pane-content {
+	margin-top: 10px;
+}
+
+.profile-pic {
+	width: 200px;
+	height: 200px;
+}
+
+.short-input {
+	max-width: 300px;
+}

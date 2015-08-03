@@ -33,9 +33,10 @@ function Security(){
 
     this.logout = function(){
         $.post(url + '/logout', null, function(){
-            $logoutBtn.hide();
-            $loginBtn.show();
-            $mainNav.children().not("#loginli").remove();
+            window.location.reload();
+            // $logoutBtn.hide();
+            // $loginBtn.show();
+            // $mainNav.children().not("#loginli").remove();
         });
     }
 
@@ -93,7 +94,8 @@ function Security(){
                 $.post( url + '/login', formData).done(function(data){
                     console.log('success: ' + data);
                     dialog.close();
-                    _security.checkLogin(null, false);
+                    window.location.reload();
+                    // _security.checkLogin(null, false);
 
                 }).fail(function(jqXHR, textStatus, error){
                      console.log('error: ' + error);
@@ -134,21 +136,63 @@ function Topic(){
                             '<input style="margin-bottom: 10px;" class="modal-input" type="text" name="subject" placeholder="主题" />' +
                             '<textarea form="topicForm" class="modal-input" placeholder="内容" style="min-height: 200px;" name="content"></textarea>'
                         '</form>';
-        this.placeToAppend;
 
         function addTopic(obj){
             var boxHtml = 
                         '<div class="topicBox col-lg-4 col-sm-6" style="background-color: '+ 
-                                randColor() + '; min-height: 200px">' + 
+                                randColor() + '" id="'+ obj._id +'">' + 
                             '<h2 style="margin: 0px;">' + obj.subject + '</h2>' + 
                             '<p style="margin: 0px;">' + obj.content + '</p>' +
                             '<div style="margin: 0px;" class="right"><p style="margin: 0px;">' + obj.createdBy + '</p>' +
                             '<p style="margin: 0px;">' + moment(obj.createdTime).format(TIME_FORMAT); + '</p></div>' +
                         '</div>';
+            var $box = $(boxHtml);
+
             if (self.placeToAppend){
                 console.log("add Topic");
-                self.placeToAppend.find('.row').append(boxHtml);
+                var $row = self.placeToAppend.find('.row');
+                $row.append($box);
+                $box.click(function(){
+                inspectTopic(obj);
+            });
             }
+
+            
+        }
+
+        function inspectTopic(obj){
+
+            var streamItemHtml = 
+            '<div class="stream-item-header">'
+                    + '<a class="" href="#">'
+                    +   '<strong>' + obj.createdBy + '</strong>'
+                    +  '</a>'
+                    +'<small class="time">'
+                    +  moment(obj.createdTime).format('MMM DD')
+                    +'</small>'
+            +'</div>'
+
+            console.log(obj);
+
+            BootstrapDialog.show({
+                    title: obj.subject + '<a class="small-padding-left" href="#">'
+                            +  '<strong>' + obj.createdBy + '</strong>'
+                            +  '</a>'
+                            +'<small class="small-padding-left">'
+                            +  moment(obj.createdTime).format('MMM DD')
+                            +'</small>' ,
+                    size: BootstrapDialog.SIZE_NORMAL,
+                    message: obj.content,
+                    buttons: [{
+                        label: '赞一个',
+                        action:  null
+                    },{
+                        label: '取消',
+                        action: function(dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
         }
 
         this.createTopicForm = function(){

@@ -11,6 +11,9 @@ $(function(){
     });
 
     _topic.getTopics();
+
+        
+    console.log()
 })
 
 

@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/animate.min.css" type="text/css">
 
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/global.css" type="text/css">
     <link rel="stylesheet" href="css/creative.css" type="text/css">
     <link rel="stylesheet" href="css/pyq.css" type="text/css">
     <link rel="stylesheet" href="css/user.css" type="text/css">
@@ -75,7 +76,10 @@
                     <!-- <img src="../img/patrick.jpg" height="120" width="120"> -->
                     <ul class="nav nav-tabs responsive" id="myTab">
                       <li>
-                        <a href="#dashboard" aria-selected="false" class="subnav-item" data-toggle="tab">Dashboard</a>
+                        <a href="#profile" aria-selected="false" class="subnav-item" data-toggle="tab">Profile</a>
+                      </li>
+                      <li>
+                        <a href="#topics" aria-selected="false" class="subnav-item" data-toggle="tab">Topics</a>
                       </li>
                       <li>
                         <a href="#inbox" aria-selected="false" class="subnav-item" data-toggle="tab">Inbox</a>
@@ -95,12 +99,52 @@
                     </ul>
 
                     <div class="tab-content responsive">
-                      <div class="tab-pane active" id="dashboard">
+                      <div class="tab-pane tab-pane-content active" id="profile">
+                            <div class="col-md-3">
+                                <img src="img/patrick.jpg" class="profile-pic"/>
+                            </div>
+                            <div class="col-md-9">
+                                <form class="form-horizontal" role="form">
+                                 <div class="form-group">
+                                 
+                                 <div class="">
+                                   <label for="inputEmail1" class="control-label">Email</label>
+                                   <input type="email" class="form-control short-input" id="inputEmail1" placeholder="Email">
+                                 </div>
+                                 </div>
+                                 <div class="form-group">
+                                 
+                                 <div class="">
+                                   <label for="inputPassword1" class="control-label">Password</label>
+                                   <input type="password" class="form-control short-input" id="inputPassword1" placeholder="Password">
+                                 </div>
+                                 </div>
+                                 <!-- <div class="form-group">
+                                 <div class="col-lg-offset-2 col-lg-10">
+                                   <div class="checkbox">
+                                     <label>
+                                       <input type="checkbox"> Remember me
+                                     </label>
+                                   </div>
+                                 </div>
+                                 </div>
+                                 <div class="form-group">
+                                 <div class="col-lg-offset-2 col-lg-10">
+                                   <button type="submit" class="btn btn-default">Sign in</button>
+                                 </div> 
+                                 </div>-->
+                                </form>
+                            </div>
+                      </div>
+                      <div class="tab-pane tab-pane-content" id="topics">
+                        <i class="fa fa-search"></i>
+                        <input type="text"></input>
+                        <button class="btn btn-default">Search</button>
                         <div class="row row-with-small-padding">
                         </div>
                       </div>
-                      <div class="tab-pane" id="inbox">inbox</div>
-                      <div class="tab-pane" id="rooms">rooms</div>
+                      <div class="tab-pane tab-pane-content" id="inbox">inbox</div>
+                      <div class="tab-pane tab-pane-content" id="rooms">rooms</div>
                     </div>
                 <!-- </div> -->
             </div>

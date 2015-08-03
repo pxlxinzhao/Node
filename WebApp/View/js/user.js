@@ -2,7 +2,7 @@ $(function(){
 
 	//setup 
 	var username;
-	var $dashboard = $("#dashboard");
+	var $topics = $("#topics");
 
 	_security.checkLogin(function(data){
 		username = data;
@@ -24,7 +24,7 @@ $(function(){
 	}
 
 	function setUpTopic(){
-		_topic.placeToAppend = $dashboard;
+		_topic.placeToAppend = $topics;
 		_topic.getTopics();
 	}
 
