@@ -43,7 +43,7 @@ $(function(){
 
 	function setUpTopic(){
 		_topic.placeToAppend = $topics;
-		_topic.getTopics();
+		_topic.getMyTopics();
 	}
 
 })

@@ -51,10 +51,28 @@ app.post('/getTopics', function(req, res){
     
 })
 
+app.post('/getMyTopics', function(req, res){
+    var keyword = req.body.keyword;
+    // console.log('keyword: ' + keyword);
+    console.log("getMyTopics");
+    var query;
+    if (keyword && keyword.length > 0){
+        query= Topic.find({createdBy: req.session.user, subject: new RegExp(keyword, 'i')}).limit(MAX_TOPIC_LOADED);
+    }else{
+        query= Topic.find({createdBy: req.session.user}).limit(MAX_TOPIC_LOADED);
+    }
+    
+    query.exec(function(err, Topics){
+        if (err) return;
+        res.status(200).send(Topics);
+    });
+    
+})
+
 app.post('/updateTopics', function(req, res){
     var _id = req.body._id;
     var action = req.body.action;
-    console.log(_id);
+    // console.log(_id);
     switch(action){
         case 'like':
             Topic.findOne({_id: new ObjectId(_id)}, function(err, data){
@@ -153,6 +171,28 @@ app.post('/createTopic', function(req, res){
     })
 });
 
+app.post('/sendMessage', function(req, res){
+    checkLogin(req, res, function(){
+        var subject = req.body.subject;  // second parameter is default
+        var content = req.body.content;
+        var user = req.session.user;
+        if (user && subject && content && subject.length > 0 && content.length > 0){
+             createTopic(user.username, subject, content, function () {
+                 res.status(200).send('successfully created topic');
+             });
+        }else{
+            res.status(400).send("error");
+        }
+    })
+});
+
+app.post('/comment', function(req, res){
+    var sender = req.session.user;
+    var receiver = req.body.receiver;
+    var content 
+    createdTime: { type: Date, default: Date.now },
+});
+
 app.listen(process.env.PORT || 7000);
 
 
@@ -176,6 +216,10 @@ var userSchema;
 var User;
 var topicSchema;
 var Topic;
+var messageSchema;
+var Message;
+var commentSchema;
+var Comment;
 
 function setUpModel(){
 	userSchema = mongoose.Schema({
@@ -195,6 +239,24 @@ function setUpModel(){
         comment: {type: Number, default: 0}
     });
     Topic = mongoose.model('Topic', topicSchema);
+
+    messageSchema = mongoose.Schema({
+        senderId: String,
+        receiverId: String,
+        content: String,
+        createdTime: { type: Date, default: Date.now },
+        viewed: { type: Boolean, default: false}
+    });
+    Message = mongoose.model('Message', messageSchema);
+
+    commentSchema = mongoose.schema({
+        topicId: String,
+        commenterId: String,
+        content: String,
+        createdTime: { type: Date, default: Date.now },
+        agree: {type: Number, default: 0},
+        disagree:  {type: Number, default: 0}
+    });
 }
 
 function createTopic(user, subject, content, successCallback){

@@ -250,6 +250,16 @@ function Topic(){
                 }
             })
         }
+
+        this.getMyTopics = function(keyword){
+            $.post('/getMyTopics', {keyword: keyword}, function(data){
+                if (!self.row) self.row = self.placeToAppend.find('.row');
+                self.row.empty();
+                for(var i=0; i<data.length; i++){
+                    addTopic(data[i]);
+                }
+            })
+        }
 }
 
 // security setup
