@@ -141,10 +141,12 @@ function Topic(){
             var boxHtml = 
                         '<div class="topicBox col-lg-4 col-sm-6" style="background-color: '+ 
                                 randColor() + '" id="'+ obj._id +'">' + 
-                            '<h2 style="margin: 0px;">' + obj.subject + '</h2>' + 
-                            '<p style="margin: 0px;">' + obj.content + '</p>' +
-                            '<div style="margin: 0px;" class="right"><p style="margin: 0px;">' + obj.createdBy + '</p>' +
-                            '<p style="margin: 0px;">' + moment(obj.createdTime).format(TIME_FORMAT); + '</p></div>' +
+                            '<h2 class="no-margin inline">' + obj.subject + '</h2>'
+                            +'<small class="small-padding-left right">'
+                            +  moment(obj.createdTime).format('MMM DD')
+                            +'</small>'  + '<a class="right" href="#">'
+                            +  '<strong>' + obj.createdBy + '</strong>'
+                            +  '</a>' + '<p class="stream-p">' + obj.content + '</p>'
                         '</div>';
             var $box = $(boxHtml);
 
@@ -184,16 +186,26 @@ function Topic(){
                     size: BootstrapDialog.SIZE_NORMAL,
                     message: obj.content,
                     buttons: [{
-                        label: '赞一个',
+                        label: '<i class="fa fa-thumbs-o-up fa-2x"></i>',
+                        action:  function(){
+                            console.log(obj._id);
+                            $.post('/updateTopics', {_id: obj._id, action: 'like'});
+                        }
+                    },{
+                        label: '<i class="fa fa-refresh fa-2x"></i>',
                         action:  null
                     },{
-                        label: '取消',
-                        action: function(dialog) {
-                            dialog.close();
-                        }
+                        label: '<i class="fa fa-reply fa-2x"></i>',
+                        action:  function(dialog){
+                            dialog.setMessage(obj.content
+                             + "<div><input type='text' placeholder='留言'/>"
+                             + "<button>发送</button></div>")
+                            
+                        } 
                     }]
                 });
         }
+
 
         this.createTopicForm = function(){
 

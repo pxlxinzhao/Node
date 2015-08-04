@@ -3,7 +3,9 @@
 }
 
 .topicBox {
-  min-height: 200px;
+  height: 200px;
+  overflow: hidden;
+  padding: 10px;
 }
 .topicBox h2 {
   font-size: 20px;
@@ -28,4 +30,22 @@
 
 .no_top_margin{
   margin-top: 0px;
+}
+
+.stream-p {
+  margin: 0px;
+  height:150px;
+  overflow: hidden;
+}
+
+.no-margin {
+  margin: 0px;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.orange {
+  color: ##f05f40;
 }

@@ -5,7 +5,7 @@ var path = require("path");
 var mongoose = require("mongoose");
 var session = require('client-sessions');
 var moment = require('moment');
-
+var ObjectId = require('mongoose').Types.ObjectId; 
 
 // Constants
 var MAX_TOPIC_LOADED = 12;
@@ -36,7 +36,7 @@ app.get('/user', function(req, res){
 // no need for login session
 app.post('/getTopics', function(req, res){
     var keyword = req.body.keyword;
-    console.log('keyword: ' + keyword);
+    // console.log('keyword: ' + keyword);
     var query;
     if (keyword && keyword.length > 0){
         query= Topic.find({subject: new RegExp(keyword, 'i')}).limit(MAX_TOPIC_LOADED);
@@ -49,6 +49,33 @@ app.post('/getTopics', function(req, res){
         res.status(200).send(Topics);
     });
     
+})
+
+app.post('/updateTopics', function(req, res){
+    var _id = req.body._id;
+    var action = req.body.action;
+    console.log(_id);
+    switch(action){
+        case 'like':
+            Topic.findOne({_id: new ObjectId(_id)}, function(err, data){
+            // Topic.findOne({subject: 'topic1'}, function(err, data){
+                if (!data) {
+                    res.status(400).send();
+                    return;
+                }
+                if (!data.like) data.like = 1;
+                else data.like += 1;
+                console.log("data.like: " + data.like);
+                data.save();
+                res.status(200).send();
+            });
+            break;
+        case'retweet':
+            break;
+        case 'comment':
+            break;
+    }
+
 })
 
 app.get('/checkLogin', function(req, res){
@@ -162,7 +189,10 @@ function setUpModel(){
         createdBy: String,
         subject: String,
         content: String,
-        createdTime: { type: Date, default: Date.now }
+        createdTime: { type: Date, default: Date.now },
+        like: {type: Number, default: 0},
+        retweet: {type: Number, default: 0},
+        comment: {type: Number, default: 0}
     });
     Topic = mongoose.model('Topic', topicSchema);
 }
