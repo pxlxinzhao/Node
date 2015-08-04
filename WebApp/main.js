@@ -34,8 +34,16 @@ app.get('/user', function(req, res){
 
 // Webservices 
 // no need for login session
-app.get('/getTopics', function(req, res){
-    var query = Topic.find({}).limit(MAX_TOPIC_LOADED);
+app.post('/getTopics', function(req, res){
+    var keyword = req.body.keyword;
+    console.log('keyword: ' + keyword);
+    var query;
+    if (keyword && keyword.length > 0){
+        query= Topic.find({subject: new RegExp(keyword, 'i')}).limit(MAX_TOPIC_LOADED);
+    }else{
+        query= Topic.find({}).limit(MAX_TOPIC_LOADED);
+    }
+    
     query.exec(function(err, Topics){
         if (err) return;
         res.status(200).send(Topics);

@@ -229,8 +229,10 @@ function Topic(){
             }
         }
 
-        this.getTopics = function(){
-            $.get('/getTopics', function(data){
+        this.getTopics = function(keyword){
+            $.post('/getTopics', {keyword: keyword}, function(data){
+                if (!self.row) self.row = self.placeToAppend.find('.row');
+                self.row.empty();
                 for(var i=0; i<data.length; i++){
                     addTopic(data[i]);
                 }

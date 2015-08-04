@@ -1,9 +1,11 @@
 $(function(){
 
-<<<<<<< HEAD
+
 	//setup 
 	var username;
 	var $topics = $("#topics");
+	var $topicSearch = $("#topic-search");
+	var $searchField = $("#search-field");
 
 	_security.checkLogin(function(data){
 		username = data;
@@ -11,39 +13,40 @@ $(function(){
 		if(username){
 			setUpTopic();
 			setupUI();
+			$topicSearch.click(searchListener);
 		}
 
 	}, false);
+
+	function searchListener(){
+		console.log($searchField.val());
+		_topic.getTopics($searchField.val());
+	}
 
 	function setupUI(){
 		$('#myTabs a').click(function (e) {
 		  e.preventDefault()
 		  $(this).tab('show')
-=======
-	_security.checkLogin(null, false);
-	setupTabs();
+		_security.checkLogin(null, false);
+		setupTabs();
+	})
+	}
 
 	function setupTabs(){
 		$('#myTabs a').click(function (e) {
 		  e.preventDefault();
 		  $(this).tab('show');
->>>>>>> origin/refactor1
 		})
 
 		fakewaffle.responsiveTabs(['xs', 'sm']);
 	}
-<<<<<<< HEAD
 
 	function setUpTopic(){
 		_topic.placeToAppend = $topics;
 		_topic.getTopics();
 	}
 
-
-})
-=======
 })
 
 
->>>>>>> origin/refactor1
 
